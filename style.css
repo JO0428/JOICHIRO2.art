@@ -1,0 +1,787 @@
+@charset "UTF-8";
+
+/* =========================
+   共通リセット・基本設定
+========================= */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background: #fff; color: #000; overflow-x: hidden;
+}
+
+/* =========================
+   ヘッダー（1300px基準でスケーリング）
+========================= */
+.header-box {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 95vw;
+  max-width: 1300px;
+  height: clamp(60px, 8vw, 100px);
+
+display: flex;
+  align-items: center;
+  justify-content: space-between; /* 左にタイトル、右にナビを配置 */
+  padding: 0 40px; /* 左右に少し余裕を持たせる */
+  background: #fff;
+  z-index: 1000;
+}
+.header-box h1 {
+  position: relative;
+  display: flex;
+  align-items: center;
+  font-family: Impact, sans-serif;
+  font-size: clamp(24px, 5vw, 60px);/* バーの高さを固定 */
+  flex: 0 0 40%; /* ヘッダーの40%の幅をタイトル用に確保する */
+  min-width: 300px; /* スマホでもこれ以上は小さくならない */
+  height: 100%;
+}
+/* 中の文字の設定 */
+.nav-menu {
+  flex: 0 0 auto; /* 必要以上に伸び縮みさせない */
+  margin-left: auto; /* 左側に全力をかけて余白を作る（右寄せの決定打） */
+}
+.nav-menu ul {
+  display: flex;
+  list-style: none;
+  gap: clamp(15px, 3vw, 80px);
+   /* ← これが右寄せの本体 */
+  align-items: center;
+	
+}
+.nav-menu a { text-decoration: none; color: black; font-weight: bold; font-size: clamp(12px, 1.2vw, 24px); }
+
+/* =========================
+   ギャラリー / プロフィール
+========================= */
+.gallery { display: flex; flex-direction: column; align-items: center; margin-top: 100px; padding-bottom: 100px; }
+.work { width: 95vw; max-width: 1300px; display: flex; flex-direction: column; align-items: center; gap: 50px; margin-bottom: 40px; }
+.work img { width: 100%; height: auto; }
+
+/* =========================
+   プロフィール（間隔調整版）
+/* =========================
+   プロフィール（整列・高さ調整版）
+========================= */
+.profile {
+  display: flex;
+  align-items: flex-start; /* ← 上端で揃える（重要） */
+  justify-content: center;
+  gap: clamp(20px, 5vw, 40px); /* 写真と文字の間隔を最適化 */
+  width: 100%;
+  padding-top: 80px;    /* 上の間隔 */
+  padding-bottom: 100px; /* 下の間隔 */
+}
+
+.profile-img {
+  width: 20vw;
+  max-width: 120px; /* 少しサイズを調整 */
+  border-radius: 0%;
+  object-fit: contain;
+  aspect-ratio: 1/1;
+  /* 画像の上にある見えない隙間を排除 */
+  display: block;
+}
+
+.profile-text {
+  flex: 0 1 auto; /* テキスト幅を適切に保持 */
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+  font-size: clamp(10px, 1.2vw, 13px);
+  line-height: 1.6; /* 行間を整えて読みやすく */
+}
+
+/* 名前（h2）の標準マージンを消して画像の上端と合わせる */
+.profile-text h2 {
+  margin: 0 0 5px 0; 
+  font-size: clamp(16px, 1.8vw, 22px);
+  line-height: 1; /* 見出し自体の高さを最小限に */
+}
+
+/* 肩書き（p）の調整 */
+.profile-text p {
+  margin-bottom: 15px;
+  color: #333;
+}
+
+/* 経歴リスト（ul）の調整 */
+.profile-text ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.profile-text li {
+  margin-bottom: 6px;
+  position: relative;
+}
+/* =========================
+   タブシステム（ここを強化）
+========================= */
+.tabbox { width: 95vw; max-width: 1300px; display: flex; flex-wrap: wrap; }
+.tabbox input { display: none; }
+
+.tab {
+  display: flex; align-items: center; gap: 10px; cursor: pointer; border: 1px solid gray;
+  width: 25%; /* 4タブの場合。5タブなら20%に変更してください */
+  aspect-ratio: 4 / 1; padding: 5px 10px; background: #fff; transition: 0.2s;
+}
+
+.tab-img { height: 80%; width: auto; aspect-ratio: 1 / 1; object-fit: contain; flex-shrink: 0; }
+.tab-title { flex: 1; font-weight: bold; font-size: clamp(10px, 1.1vw, 16px); }
+
+input:checked + .tab { background: #fff; border-bottom: none; z-index: 2; }
+
+.tabcontent {
+  display: none; width: 100%; border: 1px solid gray; border-top: none;
+  background: #fff; padding: 3vw; position: relative; z-index: 1;
+}
+
+#tabcheck1:checked ~ #tabcontent1,
+#tabcheck2:checked ~ #tabcontent2,
+#tabcheck3:checked ~ #tabcontent3,
+#tabcheck4:checked ~ #tabcontent4 { display: block; }
+
+/* =========================
+   ★ タブ2 & タブ3 のレイアウト修正
+========================= */
+
+/* 全row共通 */
+.zoo-top-row,
+.zoo-flex-row,
+.zoo-flex2-row,
+.aho-top-row,
+.aho-bottom-row,
+.vege-top-row,
+.vege-bottom-row,
+.ikimoji-top-row,
+.ikimoji-bottom-row {
+  display: flex;
+  gap: 0;
+  margin-bottom: 20px;
+  max-width: 1300px;
+}
+
+.zoo-item,
+.aho-item,
+.vege-item,
+.ikimoji-item {
+  display: flex;
+  min-width: 0;
+  flex-shrink: 1;
+  margin: 0;
+}
+
+.zoo-item img,
+.aho-item img,
+.vege-item img,
+.ikimoji-item img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/* 元の比率を維持 */
+.poster { flex: 4.79; } .real { flex: 8; }
+.shirt { flex: 7; } .figure { flex: 3.57; }
+.aho-top-row .wide { flex: 6.04; } .aho-top-row .square { flex: 9; }
+.aho-bottom-row .figi1 { flex: 10; border: 0.5px solid gray; } .aho-bottom-row .figi2 { flex: 15.1; border: 0.5px solid gray;  }
+.vege-top-row .wide { flex: 5.69; } .vege-top-row .square { flex: 9; }
+.vege-bottom-row .figure { flex: 8.765; } .vege-bottom-row .cg { flex: 5; }
+
+/* =========================
+   スライドショー（中段）
+========================= */
+.slideshow-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* 上で揃える */
+  gap: 10px !important;
+  width: 100%;
+}
+
+.slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: 0.5s;
+  object-fit: contain;
+  object-position: top; /* 画像を上側に寄せる */
+}
+.slide-thumbs{
+  display: grid; gap: 5px;
+  width: 20%; /* 固定px(250px)をやめて比率にする */
+}
+.slide-thumbs2 {
+  display: grid; gap: 0px;
+  width: 25%; /* 固定px(250px)をやめて比率にする */
+}
+.slide-thumbs { grid-template-columns: repeat(3, 1fr); }
+.slide-thumbs2 { grid-template-columns: repeat(5, 1fr); }
+
+.thumb { border: none; background: none; cursor: pointer; padding: 0; transition: 0.3s; }
+.thumb img { width: 100%; aspect-ratio: 1/1; object-fit: contain; }
+.thumb:hover img, .thumb.active img { transform: scale(1.1); }
+
+.slideshow { flex: 1; max-width: 667px; aspect-ratio: 1/1; position: relative; overflow: hidden; gap: 0px;}
+.slide.active { opacity: 1; z-index: 0; }
+
+/* ★ タブ3専用の巨大スライドショー修正 */
+#tabcontent3 .slideshow {
+  max-width: 100%;
+  width: 100%;
+  height: 55vw; /* 画面幅に合わせて高さを変える */
+  max-height: 850px; /* 元の900pxを最大値にする */
+  aspect-ratio: auto;
+  margin: 0px;
+}
+
+/* =========================
+   下段サムネ（tab-duplicate）
+========================= */
+.tab-duplicate {
+  display: flex; width: 95vw; max-width: 1300px; margin: -1px auto 0;
+}
+.tab-duplicate .tab { flex: 1; border-top: 1px solid black; }
+
+/* --- PC版のボタン設定（サムネイルと併用可能） --- *//* =========================
+   スライドショー 左右ボタン（基本デザイン）
+========================= */
+/* =========================
+   スライドショー 左右ボタン（決定版デザイン）
+========================= */
+/* =========================
+   スライドショー 左右ボタン（デザイン改善版）
+========================= */
+/* =========================
+   スライドショー 左右ボタン（側面中央配置）
+========================= */
+.nav {
+  /* ボタンの形状とサイズ */
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  
+  /* 配置：絶対配置で高さ中央（側面） */
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 15; /* 画像より前面に */
+  
+  /* デザイン：極薄の白背景＋細い枠線 */
+  background: rgba(255, 255, 255, 0.4); /* 透過度を上げて画像に馴染ませる */
+  backdrop-filter: blur(2px); /* 背景をわずかにぼかす */
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  
+  /* 中の矢印（◀▶） */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: #333;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.3s ease;
+}
+
+/* ホバー時は少しはっきりさせる */
+.nav:hover {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: #000;
+}
+
+/* 左ボタンの位置 */
+.nav.prev {
+  left: 10px;
+}
+
+/* 右ボタンの位置 */
+.nav.next {
+  right: 10px;
+}
+
+/* PC版：タブ1と2はサムネイルがあるのでボタンを隠す（必要なら） */
+/* もしPCでも全タブでボタンを出したい場合は、下の5行を消してください */
+#tabcontent1 .nav,
+#tabcontent2 .nav {
+  display: none;
+}
+
+/* =========================
+   スマホ版（768px以下）の調整
+========================= */
+@media (max-width: 768px) {
+  /* 全タブ共通：ボタンを表示し「側面中央」を維持 */
+  .nav {
+    display: flex !important;
+    width: 36px; /* スマホでは少し小さめに */
+    height: 36px;
+    top: 50% !important;
+    bottom: auto !important;
+    transform: translateY(-50%) !important;
+  }
+
+  .nav.prev {
+    left: 8px !important;
+    margin-left: 0 !important;
+  }
+
+  .nav.next {
+    right: 8px !important;
+    left: auto !important;
+    margin-left: 0 !important;
+  }
+
+  /* サムネは引き続き非表示 */
+  .slide-thumbs, .slide-thumbs2 {
+    display: none !important;
+  }
+  .slideshow-wrap {
+    grid-template-columns: 1fr !important;
+  }
+	.nav-menu {
+    display: none; /* ナビゲーションを完全に消す */
+  }
+
+  .header-box {
+    justify-content: center; /* タイトルを中央寄せにしたい場合はこれ（任意） */
+  }
+
+  .header-box h1 {
+    flex: 1; /* タイトルが画面幅いっぱいに使えるようにする */
+    justify-content: center; /* ロゴを中央に */
+  }
+}
+
+
+/* =========================
+   IKIMOJI専用レイアウト
+========================= */
+
+.ikimoji-top-row,
+.ikimoji-bottom-row {
+  display: flex;
+  gap: 15px;
+  width: 100%;
+  margin-bottom: 0px;
+}
+
+.ikimoji-item {
+  display: flex;
+  height: 100%;
+}
+
+.ikimoji-item img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block; /* 下の隙間を消す */
+}
+
+/* 上段 */
+.ikimoji-top-row {
+  height: auto;
+  max-width: 1300px;
+}
+.ikimoji-top-row .full {
+  flex: 1;
+}
+
+/* 中段スライダー（横長を大きくトリミング） */
+
+
+/* 下段横並び */
+.ikimoji-bottom-row {
+  height: auto;
+  max-width: 1300px;
+  object-fit: contain;
+}
+
+/* Safari対策：flex-basisを0%にし、幅を明示的に指定します */
+.ikimoji-item.half {
+  flex: 7.173 1 0%; 
+  min-width: 0; /* Safariの計算バグ防止 */
+}
+
+.ikimoji-item.half2 {
+  flex: 9 1 0%; 
+  min-width: 0;
+}
+
+/* 画像が親要素を突き抜けないようにし、高さを自動計算させます */
+.ikimoji-item img {
+  width: 100% !important;
+  height: auto !important;
+  display: block;
+}
+
+
+.ikimoji-scroll {
+  display: flex;
+  width: 100%;
+  height: 40vw; /* 高さを低く設定（お好みで15vw〜30vwで調整してください） */
+  max-height: 700px; /* PCでの最大高さも制限 */
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch; /* iOSでの慣性スクロールを有効化 */
+  position: relative;
+  margin-bottom: 20px !important;
+  
+  /* スクロールバーを非表示（主要ブラウザ対応） */
+  -ms-overflow-style: none; /* IE, Edge */
+  scrollbar-width: none;    /* Firefox */
+}
+
+/* スクロールバーを非表示（Chrome, Safari） */
+.ikimoji-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.ikimoji-scroll img {
+  height: 100%;
+  width: auto;
+  flex-shrink: 0;
+  pointer-events: none; /* 画像のドラッグによる誤作動を防止 */
+}
+
+/* JSでこのクラスがつくと動き出す */
+.js-ikimoji-scroll.is-moving img {
+  animation: panoramaLoop 30s linear infinite;
+}
+
+@keyframes panoramaLoop {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); } /* 画像1枚分左へ */
+}
+/* --- 全タグ共通：画像レイアウトの余白統一 --- */
+
+/* 1. 全ての横並び列（row）に20pxの隙間を設定 */
+.zoo-top-row, 
+.zoo-flex-row, 
+.zoo-flex2-row, 
+.aho-top-row, 
+.aho-bottom-row, 
+.vege-top-row, 
+.vege-bottom-row, 
+.ikimoji-top-row, 
+.ikimoji-bottom-row {
+  display: flex !important;
+  gap: 0px; /* ここで20pxに統一 */
+  margin-bottom: 20px; /* 行同士の間隔も20pxに設定 */
+}
+
+/* 2. 既存の古いマージン設定をリセット（干渉防止） */
+.zoo-item, .aho-item, .vege-item, .ikimoji-item {
+  margin: 0 !important;
+}
+
+/* 3. スライドショー前後の余白も20pxに統一 */
+.js-slideshow, .slideshow-wrap {
+  margin-bottom: 20px !important;
+}
+
+
+/* Safariで画像が消える・潰れる現象を完全に防ぐ */
+.zoo-item, .aho-item, .vege-item, .ikimoji-item {
+  min-width: 0; /* flexアイテムの最小幅を解除 */
+  flex-shrink: 1;
+}
+
+.zoo-item img, .aho-item img, .vege-item img, .ikimoji-item img {
+  width: 100% !important;
+  height: auto !important;
+  display: block;
+}
+/* --- スクロール設定（ここを上書き） --- */
+
+/* 1. ページ全体をスムーズに動かす */
+html {
+  scroll-behavior: smooth;
+}
+
+/* 2. Profileの停止位置（画面の真ん中付近にくるよう調整） */
+#profile-anchor {
+  display: block; /* ← これが重要！空のdivを認識させます */
+  scroll-margin-top: 25vh; /* 画面上端から25%空ける */
+}
+
+/* 3. Galleryの停止位置（固定ヘッダーに被らないよう調整） */
+#gallery {
+  scroll-margin-top: 100px; /* ヘッダーの高さ分空ける */
+}
+
+/* 4. Contact用のフッター */
+#footer {
+  width: 100%;
+  padding: 60px 0;
+  border-top: 1px solid #eee;
+}
+#profile,
+#gallery,
+#footer {
+  scroll-margin-top: 100px; /* ヘッダー高さより少し大きめ */
+}
+
+/* style.css または <style> タグ内に追加 */
+#site-desc {
+  transition: opacity 0.3s ease;
+  font-weight: bold;
+}
+/* style.css */
+/* ヘッダーの基本設定（高さを固定して中央制御しやすくする） */
+
+/* 作品説明エリア */
+#site-desc {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%); /* これでバーの垂直中央に配置 */
+  display: flex;
+  align-items: center; /* 題名と説明を互いの中央で合わせる */
+  gap: 20px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* 題名：Impactフォント（上下の余白がほぼない） */
+.desc-title {
+  font-family: Impact, sans-serif;
+  font-size: clamp(25px, 5vw, 50px); 
+  text-transform: uppercase;
+  line-height: 1; /* 余計な行間を排除 */
+  display: inline-block;
+}
+
+/* 説明文：日本語（上下に余白がある） */
+.desc-text {
+  font-family: sans-serif;
+  font-size: clamp(8px, 1.4vw, 15px);
+  font-weight: bold;
+  color: #666;
+  white-space: nowrap;
+  line-height: 1.5;
+  
+  /* 重要：日本語は「上」が空いて見えやすいため、微調整で下にずらす */
+  padding-top: 4px; /* これにより日本語だけを少し下げて、Impactの重心と合わせる */
+padding-bottom: 6px; /* ←ここを 4px〜8px の間で微調整すると完璧に揃います */
+}
+
+/* =========================
+   FOOTER / CONTACT 
+========================= */
+/* =========================
+   FOOTER / CONTACT 
+========================= */
+
+.contact-container {
+  width: 95vw;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.contact-header {
+  margin-bottom: 80px;
+  text-align: left; /* ポートフォリオの構成に合わせ左寄せに変更 */
+}
+
+.contact-sub {
+  font-family: Impact, sans-serif;
+  font-size: clamp(40px, 6vw, 80px); /* タイトルと響き合うサイズ感 */
+  line-height: 0.8;
+  text-transform: uppercase;
+}
+
+.contact-title {
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  color: #000;
+  margin-top: 15px;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr; /* テンプレート側を少し広く */
+  gap: 80px;
+  align-items: start;
+}
+
+/* 左カラム */
+.email-box {
+  margin-bottom: 60px;
+}
+
+.email-box .label {
+  font-family: Impact, sans-serif;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.email-link {
+  font-size: clamp(20px, 2.5vw, 32px);
+  color: #000;
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  font-weight: bold;
+  transition: opacity 0.3s;
+}
+
+.email-link:hover {
+  opacity: 0.5;
+}
+
+.notes-box h3, .contact-template h3 {
+  font-size: 16px;
+  font-weight: 800;
+  margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+}
+
+.notes-box h3::before, .contact-template h3::before {
+  content: "";
+  width: 20px;
+  height: 2px;
+  background: #000;
+  margin-right: 12px;
+}
+
+.notes-box ul {
+  list-style: none;
+  padding: 0;
+  font-size: 14px;
+  line-height: 2;
+  color: #333;
+}
+
+.notes-box li strong {
+  color: #000;
+  display: inline-block;
+  width: 5em; /* 見出しを揃える */
+}
+
+/* 右カラム：テンプレート */
+.template-desc {
+  font-size: 13px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  color: #666;
+}
+
+.copy-area {
+  background: #f4f4f4; /* テンプレート部分をグレーにして「入力エリア」感を出す */
+  padding: 30px;
+  border-radius: 4px;
+}
+
+.copy-area pre {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  color: #000;
+}
+
+.copyright {
+  margin-top: 120px;
+  text-align: center;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: #ccc;
+}
+
+
+
+#site-title, #site-desc {
+  position: absolute;
+  left: 0;
+  margin: 0;
+  transition: opacity 0.4s ease, visibility 0.4s;
+}
+
+
+#footer2 {
+  display: block !important;
+  background-color: #fff;
+  padding: 120px 0 60px;
+  border-top: 1px solid #000;
+  margin-top: 50px;
+}
+
+.contact-lead-poetic {
+　font-family: sans-serif;
+  max-width: 1000px;
+  margin: 100px auto 220px;
+  text-align: center;
+}
+
+/* ★ここを修正：!importantを付けてゴシック体を最優先にする */
+.lead-line {
+  font-size: clamp(10px, 3vw, 22px);
+  line-height: 1.9;
+  letter-spacing: 0.1em;
+  margin-top: 50px;
+}
+
+.lead-line.emphasis {
+  font-size: clamp(10px, 4vw, 22px);
+  font-weight: 700;
+}
+
+.lead-line.space {
+  margin-top: 50px;
+  font-size: clamp(10px, 2vw, 22px);
+  opacity: 1;
+}
+
+.lead-line.signature {
+  margin-top: 50px;
+  font-size: clamp(10px, 2vw, 22px);
+  opacity: 1;
+}
+
+.lead-line.signature2 {
+  margin-top: 50px;
+  font-size: clamp(10px, 2vw, 22px);
+  opacity: 1;
+}
+
+.lead-line.space span,
+.lead-line.signature span,
+.lead-line.signature2 span {
+  font-weight: 700;
+  color: #000;
+}
+
+/* =========================
+   1. スマホ・タブレット専用設定 (900px以下)
+========================= */
+@media (max-width: 900px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 60px;
+  }
+  .contact-header { margin-bottom: 50px; }
+  .email-box { margin-bottom: 40px; }
+  .header-box h1 { min-width: 0px; } /* PCでの幅制限を解除 */
+
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 60px;
+  }
+  
+  .contact-header {
+    margin-bottom: 50px;
+  }
+  
+  .email-box {
+    margin-bottom: 40px;
+  }
+}
